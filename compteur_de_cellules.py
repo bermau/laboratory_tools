@@ -1,6 +1,7 @@
 
 import tkinter as tk
 from tkinter import messagebox
+from PIL import ImageTk, Image
 
 class CellCounter:
     def __init__(self, master, total_cells=100):
@@ -17,6 +18,16 @@ class CellCounter:
             'cell1': 0,
             'cell2': 0,
             'cell3': 0
+        }
+
+        # Charger les icônes (ajustez les chemins d'accès à vos icônes)
+        self.icons = {
+            'lymphocytes': ImageTk.PhotoImage(Image.open('images/lympho_64.png')),
+            'polynucleaires': ImageTk.PhotoImage(file='images/pnn_64.png'),
+            'monocytes': ImageTk.PhotoImage(file='images/mono_64.png'),
+            'basophiles': ImageTk.PhotoImage(file='images/baso_64.png'),
+            'eosinophiles': ImageTk.PhotoImage(file='images/eosino_64.png'),
+            'cell1': None, 'cell2': None, "cell3": None
         }
         self.last_cell_type = None
 
@@ -47,7 +58,7 @@ class CellCounter:
             '9': 'monocytes', 'KP_9': 'monocytes',
             '6': 'basophiles', 'KP_6': 'basophiles',
             '5': 'eosinophiles', 'KP_5': 'eosinophiles',
-            '1': 'cell1', '1': 'cell1',
+            '1': 'cell1', 'KP_1': 'cell1',
             '2': 'cell2', 'KP_2': 'cell2',
             '3': 'cell3', 'KP_3': 'cell3'
         }
@@ -90,8 +101,14 @@ class CellCounter:
         for cell_type, pos in self.cell_labels.items():
             frame = tk.Frame(self.master, width=100, height=100, bg='lightgray', highlightbackground="black", highlightthickness=1)
             frame.grid(row=pos[0], column=pos[1], padx=10, pady=10)
-            label = tk.Label(frame, height=7, width = 14,  text=f"{cell_type.capitalize()}: {self.cell_counts[cell_type]}", font=('Arial', 12), bg='lightgray')
-            label.pack(expand=True)
+            label = tk.Label(frame, height=7, width = 14,
+                             text=f"{cell_type.capitalize()}: {self.cell_counts[cell_type]}",
+                             font=('Arial', 12), bg='lightgray',
+                             image = self.icons[cell_type],
+                             compound='center'
+                             )   # Image à gauche du texte
+
+            label.pack()
             # Associer un clic sur le label à la méthode increment_count
             label.bind('<Button-1>', lambda event, ct=cell_type: self.increment_count(ct))
 

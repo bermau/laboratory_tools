@@ -18,6 +18,7 @@ class CellCounter:
             'cell2': 0,
             'cell3': 0
         }
+        self.last_cell_type = None
 
         self.label_total = tk.Label(master, text=f"Total de cellules comptées: {self.current_total}/{self.total_cells}", font=('Arial', 14))
         self.label_total.grid(row=0, column=1, columnspan=3, pady=10)
@@ -50,10 +51,27 @@ class CellCounter:
             '2': 'cell2', 'KP_2': 'cell2',
             '3': 'cell3', 'KP_3': 'cell3'
         }
+        other_key = {
+            "Delete" : self.delete,
+            "BackSpace": self.delete
+        }
 
         # Incrémenter le compteur si la touche est mappée
         if key in key_mapping:
             self.increment_count(key_mapping[key])
+
+        else:
+            if key in other_key:
+                other_key[key]()
+    def delete(self):
+        print("Delete")
+        if self.current_total > 0:
+            self.cell_counts[self.last_cell_type] -= 1
+            self.current_total -= 1
+            self.update_display(self.last_cell_type)
+        else:
+            messagebox.showinfo("Impossible", f"Pas assez de cellules.")
+
 
     def create_grid(self):
         """Créer une grille de carrés pour chaque type de cellule."""
@@ -72,7 +90,7 @@ class CellCounter:
         for cell_type, pos in self.cell_labels.items():
             frame = tk.Frame(self.master, width=100, height=100, bg='lightgray', highlightbackground="black", highlightthickness=1)
             frame.grid(row=pos[0], column=pos[1], padx=10, pady=10)
-            label = tk.Label(frame, text=f"{cell_type.capitalize()}: {self.cell_counts[cell_type]}", font=('Arial', 12), bg='lightgray')
+            label = tk.Label(frame, height=7, width = 14,  text=f"{cell_type.capitalize()}: {self.cell_counts[cell_type]}", font=('Arial', 12), bg='lightgray')
             label.pack(expand=True)
             # Associer un clic sur le label à la méthode increment_count
             label.bind('<Button-1>', lambda event, ct=cell_type: self.increment_count(ct))
@@ -84,6 +102,7 @@ class CellCounter:
             self.cell_counts[cell_type] += 1
             self.current_total += 1
             self.update_display(cell_type)
+            self.last_cell_type = cell_type
         else:
             messagebox.showinfo("Fin du comptage", f"Vous avez atteint {self.total_cells} cellules.")
 

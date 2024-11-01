@@ -93,7 +93,21 @@ module make_a_slice() {
 } ;
 
 // Faire une slice
-make_a_slice() box();
+// make_a_slice() box();
+
+
+
+// Faire une découpe pour connexion
+intersection(){
+    
+    make_a_slice() {
+        box(); 
+        color("yellow",  0.9) translate([50, 0]) box();
+        };
+    translate([10,-10])cube([30,25,40]); 
+    }
+
+
 
 // faire un slice de 2 emboitements : 
 //make_a_slice() {

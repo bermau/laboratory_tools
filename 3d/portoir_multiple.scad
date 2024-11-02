@@ -12,7 +12,7 @@ DIA_TROU_BAS_REEL = 3 ;
 DIA_TROU_BAS = DIA_TROU_BAS_REEL+ COMPENSATION_IMPRIMANTE ; 
 
 
-SPACE = 0.6 + 0; // bethween 2 parts (friction free zone). 
+SPACE = 0.5; // bethween 2 parts (friction free zone).
 EPS =  0.01; 
 
 module mortaise(){
@@ -24,7 +24,7 @@ module 2d_mortaise(){
 };
 
 module 2d_tenon(){
-    offset(0.5, $fn= 30) polygon(points = [[0.5, 0], [0, 2], [10, 2], [9.5, 0]]);  
+    offset(0.5, $fn= 30) polygon(points = [[0.5 +0.2, 0], [0, 2], [10, 2], [9.5-0.2, 0]]);  
 };
 
 module tenon(){
@@ -85,10 +85,10 @@ module box(){
     };
 };
 
-module make_a_slice() {
+module make_a_slice(height=1.5) {
     intersection(){
         children();
-        translate([-30, -30, +15]) cube([100, 100, 1.5]);
+        translate([-30, -30, +15]) cube([100, 100, height]);
     }
 } ;
 
@@ -98,14 +98,14 @@ module make_a_slice() {
 
 
 // Faire une découpe pour connexion
-intersection(){
-    
-    make_a_slice() {
-        box(); 
-        color("yellow",  0.9) translate([50, 0]) box();
-        };
-    translate([10,-10])cube([30,25,40]); 
-    }
+//intersection(){
+//    
+//    make_a_slice(2) {
+//        box(); 
+//        color("yellow",  0.9) translate([50, 0]) box();
+//        };
+//    translate([10,-10])cube([30,25,40]); 
+//    }
 
 
 
@@ -118,8 +118,8 @@ intersection(){
     
 //color("yellow",  0.9) translate([40, 0]) make_a_slice();
 
-// Tester l'emboitement
-//box();
+// boîte
+box();
 
 // %color("yellow",  0.9) translate([40, 0])box();
 //2d_tenon();
